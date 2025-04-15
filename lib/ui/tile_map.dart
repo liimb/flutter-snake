@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
+import 'package:snakegame/helpers/logger_service.dart';
 
 import '../common/game_constants.dart';
 import '../snake_game.dart';
@@ -11,39 +12,54 @@ class TileMap extends PositionComponent {
 
   late Paint primary;
   late Paint secondary;
+  late Paint border;
 
-  final Map<Rect, Paint> boardCells = {};
+  late List<List<Rect>> boardCells;
+  late int columns;
+  late int rows;
 
-  void _fillBoardCells() {
-    for (var i = 0; i < (gameRef.size.x / GameConstants.snakeSize).floorToDouble(); i++) {
-      for (var j = 4; j < (gameRef.size.y / GameConstants.snakeSize).floorToDouble(); j++) {
-        final rect = Rect.fromLTWH(
-          i * GameConstants.snakeSize,
-          j * GameConstants.snakeSize,
-          GameConstants.snakeSize,
-          GameConstants.snakeSize,
-        );
-        final paint = (i + j).isEven ? secondary : primary;
-
-        boardCells.addAll({rect: paint});
-      }
-    }
-  }
+  double get cellSize => GameConstants.snakeSize;
 
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    position = Vector2(-gameRef.size.x / 2, -gameRef.size.y / 2);
-    primary = Paint()..color = Colors.grey.withOpacity(.6);
-    secondary = Paint()..color = Colors.blue.withOpacity(.6);
 
-    _fillBoardCells();
+    position = Vector2(-gameRef.size.x / 2, -gameRef.size.y / 2);
+
+    primary = Paint()..color = Color(0xFF5696ab);
+    secondary = Paint()..color = Color(0xFF93bcc7);
+    border = Paint()..color = Color(0xFF043c6c);
+
+    columns = (gameRef.size.x / cellSize).floor();
+    rows = (gameRef.size.y / cellSize).floor() - 4;
+
+    GameLogger().i("${columns} ${rows}");
+
+    _generateBoard();
+  }
+
+  void _generateBoard() {
+    boardCells = List.generate(columns, (i) {
+      return List.generate(rows, (j) {
+        return Rect.fromLTWH(
+          i * cellSize,
+          j * cellSize + GameConstants.snakeSize * 4,
+          cellSize,
+          cellSize,
+        );
+      });
+    });
   }
 
   @override
   void render(Canvas canvas) {
-    for (final cell in boardCells.entries) {
-      canvas.drawRect(cell.key, cell.value);
+    for (int i = 0; i < columns; i++) {
+      for (int j = 0; j < rows; j++) {
+        final rect = boardCells[i][j];
+        final paint = (i == 0 || i == columns - 1 || j == 0 || j == rows - 1) ? border : ((i + j).isEven ? secondary : primary);
+        canvas.drawRect(rect, paint);
+      }
     }
   }
+
 }

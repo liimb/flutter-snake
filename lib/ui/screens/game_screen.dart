@@ -16,9 +16,13 @@ class GameScreen extends World with HasGameReference<SnakeGame>, TapCallbacks, D
 
   @override
   Future<void> onLoad() async {
+    _tileMap = TileMap(game);
+    await _tileMap.onLoad();
+    _snake = Snake(_tileMap, 100);
+
     addAll([
-      _tileMap = TileMap(game),
-      _snake = Snake(Vector2(0, 0), 200)
+       _tileMap,
+      _snake
     ]);
   }
 
@@ -28,7 +32,6 @@ class GameScreen extends World with HasGameReference<SnakeGame>, TapCallbacks, D
     _snake.update(dt);
   }
 
-  // Обработка тапов (опционально)
   @override
   void onTapUp(TapUpEvent event) {
     super.onTapUp(event);
