@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:snakegame/helpers/logger_service.dart';
 import 'package:snakegame/ui/tile_map.dart';
 
+import '../common/direction.dart';
 import '../common/game_constants.dart';
 import '../snake_game.dart';
-import 'SnakeDirection.dart';
 
 class Snake extends Component with HasGameRef<SnakeGame> {
   Snake(this._tilemap, this.snakeLength, {super.key});
@@ -20,6 +20,7 @@ class Snake extends Component with HasGameRef<SnakeGame> {
   List<Vector2> snakeParts = [];
   late Vector2 _direction;
   double speed = GameConstants.snakeSpeed;
+  late Vector2 _nextTargetPosition;
 
   @override
   Future<void> onLoad() async {
@@ -28,29 +29,36 @@ class Snake extends Component with HasGameRef<SnakeGame> {
     final centerI = _tilemap.boardCells.length ~/ 4;
     final centerJ = _tilemap.boardCells[0].length ~/ 2;
     final centerRect = _tilemap.boardCells[centerI][centerJ];
-    _startPos = Vector2(centerRect.center.dx - GameConstants.snakeSize / 2, centerRect.center.dy - GameConstants.snakeSize / 2) + _tilemap.position;
+    _startPos = Vector2(centerRect.left, centerRect.top) + _tilemap.position;
 
     GameLogger().i(_startPos.toString());
 
     for (int i = 0; i < snakeLength; i++) {
-      snakeParts.add(_startPos);
+      snakeParts.add(_startPos.clone());
     }
 
     _direction = Vector2(0, 0);
+
+    _nextTargetPosition = _startPos + _direction * GameConstants.snakeSize;
   }
 
   @override
   void update(double dt) {
     super.update(dt);
 
-    final head = snakeParts.first;
-    final newHead = head + _direction * speed * dt;
+    if (snakeParts.isEmpty) return;
 
-    snakeParts.insert(0, newHead);
-    snakeParts.removeLast();
+    Vector2 head = snakeParts.first;
+    Vector2 toTarget = _nextTargetPosition - head;
 
-    if (newHead.x < 0 || newHead.x > gameRef.size.x || newHead.y < 0 || newHead.y > gameRef.size.y) {
-
+    if (toTarget.length <= speed * dt) {
+      final newHead = _nextTargetPosition.clone();
+      snakeParts.insert(0, newHead);
+      snakeParts.removeLast();
+      _nextTargetPosition = newHead + _direction * GameConstants.snakeSize;
+    } else {
+      Vector2 newHead = head + toTarget.normalized() * speed * dt;
+      snakeParts[0] = newHead;
     }
   }
 
@@ -58,16 +66,16 @@ class Snake extends Component with HasGameRef<SnakeGame> {
   void onSwipe(Direction direction) {
     switch (direction) {
       case Direction.up:
-        _direction = Vector2(0, -1);
+        if(_direction != Vector2(0, -1)) {_direction = Vector2(0, -1);};
         break;
       case Direction.down:
-        _direction = Vector2(0, 1);
+        if(_direction != Vector2(0, 1)) {_direction = Vector2(0, 1);};
         break;
       case Direction.left:
-        _direction = Vector2(-1, 0);
+        if(_direction != Vector2(-1, 0)) {_direction = Vector2(-1, 0);};
         break;
       case Direction.right:
-        _direction = Vector2(1, 0);
+        if(_direction != Vector2(1, 0)) {_direction = Vector2(1, 0);};
         break;
     }
   }

@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
+import 'package:snakegame/components/border_tile.dart';
 import 'package:snakegame/helpers/logger_service.dart';
 
 import '../common/game_constants.dart';
@@ -41,12 +42,19 @@ class TileMap extends PositionComponent {
   void _generateBoard() {
     boardCells = List.generate(columns, (i) {
       return List.generate(rows, (j) {
-        return Rect.fromLTWH(
+        final rect = Rect.fromLTWH(
           i * cellSize,
           j * cellSize + GameConstants.snakeSize * 4,
           cellSize,
           cellSize,
         );
+
+        final isBorder = (i == 0 || i == columns - 1 || j == 0 || j == rows - 1);
+        if (isBorder) {
+          final block = BorderTile(rect);
+          add(block);
+        }
+        return rect;
       });
     });
   }
@@ -61,5 +69,4 @@ class TileMap extends PositionComponent {
       }
     }
   }
-
 }
