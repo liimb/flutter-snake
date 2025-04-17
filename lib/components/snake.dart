@@ -66,16 +66,16 @@ class Snake extends Component with HasGameRef<SnakeGame> {
   void onSwipe(Direction direction) {
     switch (direction) {
       case Direction.up:
-        if(_direction != Vector2(0, -1)) {_direction = Vector2(0, -1);};
+        if(_direction != Vector2(0, 1)) {_direction = Vector2(0, -1);};
         break;
       case Direction.down:
-        if(_direction != Vector2(0, 1)) {_direction = Vector2(0, 1);};
+        if(_direction != Vector2(0, -1)) {_direction = Vector2(0, 1);};
         break;
       case Direction.left:
-        if(_direction != Vector2(-1, 0)) {_direction = Vector2(-1, 0);};
+        if(_direction != Vector2(1, 0)) {_direction = Vector2(-1, 0);};
         break;
       case Direction.right:
-        if(_direction != Vector2(1, 0)) {_direction = Vector2(1, 0);};
+        if(_direction != Vector2(-1, 0)) {_direction = Vector2(1, 0);};
         break;
     }
   }
