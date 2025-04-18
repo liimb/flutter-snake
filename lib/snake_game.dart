@@ -9,11 +9,12 @@ class SnakeGame extends FlameGame with TapDetector, HasCollisionDetection {
   @override
   Future<void> onLoad() async {
     super.onLoad();
+
     add(
       router = RouterComponent(
         routes: {
           'menu': Route(MenuScreen.new),
-          'game': WorldRoute(GameScreen.new),
+          'game': WorldRoute(GameScreen.new, maintainState: false),
         },
         initialRoute: 'menu',
       ),

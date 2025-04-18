@@ -7,7 +7,6 @@ import '../../common/direction.dart';
 import '../../snake_game.dart';
 
 class GameScreen extends World with HasGameReference<SnakeGame>, TapCallbacks, DragCallbacks {
-
   late final TileMap _tileMap;
   late final Snake _snake;
   Vector2? _dragStartPosition;
@@ -15,14 +14,15 @@ class GameScreen extends World with HasGameReference<SnakeGame>, TapCallbacks, D
 
   @override
   Future<void> onLoad() async {
-    _tileMap = TileMap(game);
-    await _tileMap.onLoad();
-    _snake = Snake(_tileMap, 10);
+    super.onLoad();
+    loadGame();
+  }
 
-    addAll([
-       _tileMap,
-      _snake
-    ]);
+  Future<void> loadGame() async {
+    _tileMap = TileMap(game);
+    add(_tileMap);
+    _snake = Snake(_tileMap, (_tileMap.columns / 3).floor());
+    add(_snake);
   }
 
   @override

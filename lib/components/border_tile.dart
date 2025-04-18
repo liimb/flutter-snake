@@ -13,6 +13,6 @@ class BorderTile extends PositionComponent with HasGameReference<SnakeGame> {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    add(RectangleHitbox());
+    add(RectangleHitbox(collisionType: CollisionType.passive));
   }
 }

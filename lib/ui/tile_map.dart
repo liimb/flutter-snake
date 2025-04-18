@@ -21,30 +21,34 @@ class TileMap extends PositionComponent {
 
   double get cellSize => GameConstants.snakeSize;
 
+  int mapY = 150;
+
   @override
   Future<void> onLoad() async {
     super.onLoad();
 
-    position = Vector2(-gameRef.size.x / 2, -gameRef.size.y / 2);
+    GameLogger().i("tilemap load");
+
+    position = Vector2(-gameRef.size.x / 2, -gameRef.size.y / 2  + (mapY));
 
     primary = Paint()..color = Color(0xFF5696ab);
     secondary = Paint()..color = Color(0xFF93bcc7);
     border = Paint()..color = Color(0xFF043c6c);
 
     columns = (gameRef.size.x / cellSize).floor();
-    rows = (gameRef.size.y / cellSize).floor() - 4;
+    rows = (gameRef.size.y / cellSize).floor() - (mapY / cellSize).floor();
 
     GameLogger().i("${columns} ${rows}");
 
-    _generateBoard();
+    await _generateBoard();
   }
 
-  void _generateBoard() {
+  Future<void> _generateBoard() async {
     boardCells = List.generate(columns, (i) {
       return List.generate(rows, (j) {
         final rect = Rect.fromLTWH(
           i * cellSize,
-          j * cellSize + GameConstants.snakeSize * 4,
+          j * cellSize,
           cellSize,
           cellSize,
         );
