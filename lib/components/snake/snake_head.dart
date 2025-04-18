@@ -1,17 +1,19 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:snakegame/common/game_constants.dart';
-import 'package:snakegame/components/border_tile.dart';
-import 'package:snakegame/components/snake.dart';
-import 'package:snakegame/components/snake_border.dart';
-import 'package:snakegame/components/snake_part.dart';
+import 'package:snakegame/components/map/border_tile.dart';
+import 'package:snakegame/components/snake/snake.dart';
+import 'package:snakegame/components/snake/snake_border.dart';
+import 'package:snakegame/components/snake/snake_part.dart';
+import 'package:snakegame/components/yummy.dart';
 import 'package:snakegame/helpers/logger_service.dart';
 import 'package:snakegame/snake_game.dart';
 
 class SnakeHead extends SnakePart with CollisionCallbacks, HasGameReference<SnakeGame> {
-  SnakeHead(super.to, this.snake);
+  SnakeHead(super.to, this.snake, this.onYummyEaten);
 
   late final Snake snake;
+  late final void Function(SpriteComponent yummy) onYummyEaten;
 
   @override
   void onLoad() {
@@ -38,6 +40,9 @@ class SnakeHead extends SnakePart with CollisionCallbacks, HasGameReference<Snak
       deathSnake();
     } else if (other is SnakeBorder) {
       deathSnake();
+    } else if (other is Yummy) {
+      snake.addBorderPart();
+      onYummyEaten(other);
     }
   }
 

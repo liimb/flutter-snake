@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import '../snake_game.dart';
+import '../../snake_game.dart';
 
 class BorderTile extends PositionComponent with HasGameReference<SnakeGame> {
   BorderTile(Rect rect)

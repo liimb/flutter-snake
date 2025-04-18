@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 
-import '../common/game_constants.dart';
+import '../../common/game_constants.dart';
 
 class SnakePart extends PositionComponent {
   SnakePart(this.to);

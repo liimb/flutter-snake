@@ -1,10 +1,11 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
-import 'package:snakegame/components/border_tile.dart';
+import 'package:snakegame/components/map/border_tile.dart';
+import 'package:snakegame/components/map/tile_position.dart';
 import 'package:snakegame/helpers/logger_service.dart';
 
-import '../common/game_constants.dart';
-import '../snake_game.dart';
+import '../../common/game_constants.dart';
+import '../../snake_game.dart';
 
 class TileMap extends PositionComponent {
   TileMap(this.gameRef, {super.key});
@@ -21,7 +22,7 @@ class TileMap extends PositionComponent {
 
   double get cellSize => GameConstants.snakeSize;
 
-  int mapY = 150;
+  int mapY = 100;
 
   @override
   Future<void> onLoad() async {
@@ -38,7 +39,7 @@ class TileMap extends PositionComponent {
     columns = (gameRef.size.x / cellSize).floor();
     rows = (gameRef.size.y / cellSize).floor() - (mapY / cellSize).floor();
 
-    GameLogger().i("${columns} ${rows}");
+    GameLogger().i("tilemap size: $columns x $rows");
 
     await _generateBoard();
   }
@@ -61,6 +62,23 @@ class TileMap extends PositionComponent {
         return rect;
       });
     });
+  }
+
+  List<TilePosition> getFreeCells(List<TilePosition> occupied) {
+    final freeCells = <TilePosition>[];
+
+    for (int i = 0; i < columns; i++) {
+      for (int j = 0; j < rows; j++) {
+        final isBorder = (i == 0 || i == columns - 1 || j == 0 || j == rows - 1);
+        final current = TilePosition(i, j);
+
+        if (!occupied.contains(current) && !isBorder) {
+          freeCells.add(current);
+        }
+      }
+    }
+
+    return freeCells;
   }
 
   @override

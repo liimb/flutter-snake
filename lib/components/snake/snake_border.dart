@@ -1,8 +1,8 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:snakegame/components/snake_part.dart';
+import 'package:snakegame/components/snake/snake_part.dart';
 
-import '../common/game_constants.dart';
+import '../../common/game_constants.dart';
 
 class SnakeBorder extends SnakePart with CollisionCallbacks {
   SnakeBorder(super.to);

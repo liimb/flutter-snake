@@ -1,8 +1,9 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:snakegame/components/snake.dart';
+import 'package:snakegame/components/snake/snake.dart';
+import 'package:snakegame/components/yummy.dart';
 import 'package:snakegame/helpers/logger_service.dart';
-import 'package:snakegame/ui/tile_map.dart';
+import 'package:snakegame/components/map/tile_map.dart';
 import '../../common/direction.dart';
 import '../../snake_game.dart';
 
@@ -21,14 +22,40 @@ class GameScreen extends World with HasGameReference<SnakeGame>, TapCallbacks, D
   Future<void> loadGame() async {
     _tileMap = TileMap(game);
     add(_tileMap);
-    _snake = Snake(_tileMap, (_tileMap.columns / 3).floor());
+    _snake = Snake(
+        _tileMap,
+        (_tileMap.columns / 3).floor() * 100,
+            (SpriteComponent yummy) {remove(yummy); spawnYummy(_tileMap, _snake);}
+    );
     add(_snake);
+
+    spawnYummy(_tileMap, _snake);
   }
 
   @override
   void update(double dt) {
     super.update(dt);
     _snake.update(dt);
+  }
+
+  void spawnYummy(TileMap tileMap, Snake snake) {
+    final occupied = snake.getOccupiedGridPositions(tileMap);
+    final freeCells = tileMap.getFreeCells(occupied);
+
+    if (freeCells.isEmpty) return;
+
+    final cell = (freeCells..shuffle()).first;
+    final rect = tileMap.boardCells[cell.i][cell.j];
+
+    final pos = Vector2(
+      tileMap.position.x + rect.left,
+      tileMap.position.y + rect.top,
+    );
+
+    final currentYummy = Yummy(pos, (SpriteComponent yummy) {remove(yummy); spawnYummy(_tileMap, _snake);});
+    add(currentYummy);
+
+    GameLogger().i("yummy spawn: $pos");
   }
 
   @override
