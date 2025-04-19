@@ -2,6 +2,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:snakegame/ui/screens/game_screen.dart';
 import 'package:snakegame/ui/screens/menu_screen.dart';
+import 'package:snakegame/ui/screens/authors_screen.dart';
 
 class SnakeGame extends FlameGame with TapDetector, HasCollisionDetection {
   late final RouterComponent router;
@@ -16,6 +17,7 @@ class SnakeGame extends FlameGame with TapDetector, HasCollisionDetection {
         routes: {
           'menu': Route(MenuScreen.new),
           'game': WorldRoute(GameScreen.new, maintainState: false),
+          'authors': Route(AuthorScreen.new),
         },
         initialRoute: 'menu',
       ),
