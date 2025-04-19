@@ -25,11 +25,15 @@ class SnakeHead extends SnakePart with CollisionCallbacks, HasGameReference<Snak
 
     final hitboxPosition = Vector2(inset, inset);
 
-    add(RectangleHitbox(
-      position: hitboxPosition,
-      size: hitboxSize,
-      collisionType: CollisionType.active,
-    ));
+    // add(RectangleHitbox(
+    //   position: hitboxPosition,
+    //   size: hitboxSize,
+    //   collisionType: CollisionType.active,
+    // ));
+
+    add(
+      CircleHitbox(collisionType: CollisionType.active, radius: hitboxSize.x / 2, anchor: Anchor.center)
+    );
   }
 
   @override

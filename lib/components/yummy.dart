@@ -3,16 +3,16 @@ import 'dart:math';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:snakegame/common/game_constants.dart';
+import 'package:snakegame/components/snake/snake_border.dart';
+import 'package:snakegame/components/snake/snake_head.dart';
 import 'package:snakegame/snake_game.dart';
 
 class Yummy extends SpriteComponent with HasGameReference<SnakeGame>, CollisionCallbacks {
-  Yummy(Vector2 position, this.onYummyDelete)
+  Yummy(Vector2 position)
       : super(
     position: position,
     size: Vector2.all(GameConstants.snakeSize),
   );
-
-  late final void Function(SpriteComponent yummy) onYummyDelete;
 
   static final _random = Random();
   static final List<String> spritePaths = [
@@ -59,7 +59,7 @@ class Yummy extends SpriteComponent with HasGameReference<SnakeGame>, CollisionC
     final hitboxPosition = Vector2.all(inset);
 
     add(
-      CircleHitbox(collisionType: CollisionType.active, radius: hitboxSize, position: hitboxPosition)
+      CircleHitbox(collisionType: CollisionType.passive, radius: hitboxSize, position: hitboxPosition)
     );
   }
 
@@ -76,7 +76,10 @@ class Yummy extends SpriteComponent with HasGameReference<SnakeGame>, CollisionC
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
-
-    onYummyDelete(this);
+    if(other is SnakeHead) {
+      removeFromParent();
+    } else if (other is SnakeBorder) {
+      
+    }
   }
 }

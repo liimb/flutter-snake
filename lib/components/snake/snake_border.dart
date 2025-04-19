@@ -9,8 +9,14 @@ class SnakeBorder extends SnakePart with CollisionCallbacks {
 
   @override
   void onLoad() {
-    add(RectangleHitbox(
-        size: Vector2(GameConstants.snakeSize, GameConstants.snakeSize),
+    // add(RectangleHitbox(
+    //     size: Vector2(GameConstants.snakeSize, GameConstants.snakeSize),
+    //     collisionType: CollisionType.passive
+    // ));
+
+    add(CircleHitbox(
+        radius: GameConstants.snakeSize * 0.5,
+        anchor: Anchor.center,
         collisionType: CollisionType.passive
     ));
   }

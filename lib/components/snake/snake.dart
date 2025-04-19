@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flutter/material.dart';
 import 'package:snakegame/components/snake/snake_border.dart';
 import 'package:snakegame/components/snake/snake_head.dart';
 import 'package:snakegame/components/snake/snake_part.dart';
@@ -24,6 +25,8 @@ class Snake extends Component with HasGameRef<SnakeGame> {
 
   final List<SnakePart> snakeParts = [];
 
+  final List<Vector2> _directionQueue = [];
+
   @override
   Future<void> onLoad() async {
     super.onLoad();
@@ -34,8 +37,8 @@ class Snake extends Component with HasGameRef<SnakeGame> {
     final centerI = _tilemap.boardCells.length ~/ 2;
     final centerJ = _tilemap.boardCells[0].length ~/ 2;
     final centerRect = _tilemap.boardCells[centerI][centerJ];
-    _startPos = Vector2(centerRect.left, centerRect.top) + _tilemap.position; //если квадратная
-    //_startPos = Vector2(centerRect.left / 2, centerRect.top / 2) + _tilemap.position; //если круглая + заменить отрисовку частей
+    //_startPos = Vector2(centerRect.left, centerRect.top) + _tilemap.position; //если квадратная
+    _startPos = Vector2(centerRect.center.dx, centerRect.center.dy) + _tilemap.position; //если круглая + заменить отрисовку частей
 
     _direction = Vector2.zero();
 
@@ -79,7 +82,12 @@ class Snake extends Component with HasGameRef<SnakeGame> {
     }
 
     SnakePart head = snakeParts.first;
-    if ((head.to - head.position).length < 0.1) {
+    if ((head.to - head.position).length < 0.5) {
+
+      if (_directionQueue.isNotEmpty) {
+        _direction = _directionQueue.removeAt(0);
+      }
+
       head.to += _direction * GameConstants.snakeSize;
 
       for (int i = 1; i < snakeParts.length; i++) {
@@ -89,13 +97,10 @@ class Snake extends Component with HasGameRef<SnakeGame> {
   }
 
   List<TilePosition> getOccupiedGridPositions(TileMap tileMap) {
-    return snakeParts.map((part) {
-
-      final i = (part.x - tileMap.position.x).floor();
-      final j = (part.y - tileMap.position.y).floor();
-
-      return TilePosition(i, j);
-    }).toList();
+    return snakeParts
+        .map((part) => toTile(part.position))
+        .toSet()
+        .toList();
   }
 
   void addBorderPart() {
@@ -111,6 +116,16 @@ class Snake extends Component with HasGameRef<SnakeGame> {
 
     snakeParts.add(newPart);
     add(newPart);
+  }
+
+  TilePosition toTile(Vector2 pos) {
+    final localX = pos.x - _tilemap.position.x;
+    final localY = pos.y - _tilemap.position.y;
+
+    final i = (localX / _tilemap.cellSize).floor();
+    final j = (localY / _tilemap.cellSize).floor();
+
+    return TilePosition(i, j);
   }
 
   void onSwipe(Direction direction) {
@@ -130,10 +145,46 @@ class Snake extends Component with HasGameRef<SnakeGame> {
         break;
     }
 
-    if(_direction == Vector2.zero() && direction == Direction.left) return;
-
-    if (newDir + _direction != Vector2.zero()) {
+    if (_direction == Vector2.zero()) {
+      if (newDir == Vector2(-1, 0)) return;
       _direction = newDir;
+      return;
+    }
+
+    final lastDir = _directionQueue.isNotEmpty ? _directionQueue.last : _direction;
+
+    if (lastDir + newDir != Vector2.zero()) {
+      _directionQueue.add(newDir);
+    }
+  }
+
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+
+    if (snakeParts.length < 2) return;
+
+    final double radius = GameConstants.snakeSize / 2;
+    final Paint connectorPaint = Paint()
+      ..color = const Color(0xFFfcc45c)
+      ..style = PaintingStyle.fill;
+
+    for (int i = 0; i < snakeParts.length - 1; i++) {
+      final partA = snakeParts[i];
+      final partB = snakeParts[i + 1];
+
+      final centerA = partA.position + Vector2.all(radius);
+      final centerB = partB.position + Vector2.all(radius);
+
+      final double distance = centerA.distanceTo(centerB);
+
+      final Vector2 connectorCenter = centerA - Vector2(distance, radius);
+
+      canvas.drawCircle(
+        Offset(connectorCenter.x, connectorCenter.y),
+        radius * 0.7,
+        connectorPaint,
+      );
     }
   }
 }

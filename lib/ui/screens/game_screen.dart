@@ -5,13 +5,34 @@ import 'package:snakegame/components/yummy.dart';
 import 'package:snakegame/helpers/logger_service.dart';
 import 'package:snakegame/components/map/tile_map.dart';
 import '../../common/direction.dart';
+import '../../components/ui/back_button.dart';
+import '../../components/ui/pause_button.dart';
 import '../../snake_game.dart';
+import 'dart:async';
 
 class GameScreen extends World with HasGameReference<SnakeGame>, TapCallbacks, DragCallbacks {
   late final TileMap _tileMap;
   late final Snake _snake;
   Vector2? _dragStartPosition;
   Vector2? _lastDragPosition;
+
+  final hudComponents = <Component>[];
+
+  @override
+  void onMount() {
+    super.onMount();
+    hudComponents.addAll([
+      BackButton(),
+      PauseButton(),
+    ]);
+    game.camera.viewport.addAll(hudComponents);
+  }
+
+  @override
+  void onRemove() {
+    game.camera.viewport.removeAll(hudComponents);
+    super.onRemove();
+  }
 
   @override
   Future<void> onLoad() async {
@@ -24,12 +45,12 @@ class GameScreen extends World with HasGameReference<SnakeGame>, TapCallbacks, D
     add(_tileMap);
     _snake = Snake(
         _tileMap,
-        (_tileMap.columns / 3).floor() * 100,
-            (SpriteComponent yummy) {remove(yummy); spawnYummy(_tileMap, _snake);}
+        (_tileMap.columns / 3).floor(),
+            (SpriteComponent yummy) {remove(yummy); spawnYummy();}
     );
     add(_snake);
 
-    spawnYummy(_tileMap, _snake);
+    spawnYummy();
   }
 
   @override
@@ -38,24 +59,30 @@ class GameScreen extends World with HasGameReference<SnakeGame>, TapCallbacks, D
     _snake.update(dt);
   }
 
-  void spawnYummy(TileMap tileMap, Snake snake) {
-    final occupied = snake.getOccupiedGridPositions(tileMap);
-    final freeCells = tileMap.getFreeCells(occupied);
+  void spawnYummy() {
+    Vector2 pos = _calculateYummyPosition();
 
-    if (freeCells.isEmpty) return;
-
-    final cell = (freeCells..shuffle()).first;
-    final rect = tileMap.boardCells[cell.i][cell.j];
-
-    final pos = Vector2(
-      tileMap.position.x + rect.left,
-      tileMap.position.y + rect.top,
-    );
-
-    final currentYummy = Yummy(pos, (SpriteComponent yummy) {remove(yummy); spawnYummy(_tileMap, _snake);});
+    final currentYummy = Yummy(pos);
     add(currentYummy);
 
     GameLogger().i("yummy spawn: $pos");
+  }
+
+  Vector2 _calculateYummyPosition() {
+    final occupied = _snake.getOccupiedGridPositions(_tileMap);
+    final freeCells = _tileMap.getFreeCells(occupied);
+
+    if (freeCells.isEmpty) return _tileMap.center;
+
+    final cell = (freeCells..shuffle()).first;
+    final rect = _tileMap.boardCells[cell.i][cell.j];
+
+    final pos = Vector2(
+      _tileMap.position.x + rect.left,
+      _tileMap.position.y + rect.top,
+    );
+
+    return pos;
   }
 
   @override

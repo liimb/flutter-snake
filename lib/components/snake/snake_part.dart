@@ -12,10 +12,10 @@ class SnakePart extends PositionComponent {
   @override
   void render(Canvas canvas) {
     final paint = Paint()..color = const Color(0xFFfcc45c);
-    //canvas.drawCircle(Offset(0, 0), GameConstants.snakeSize / 2, paint);
-    canvas.drawRect(
-      Rect.fromLTWH(0, 0, GameConstants.snakeSize, GameConstants.snakeSize),
-      paint,
-    );
+    canvas.drawCircle(Offset(0, 0), GameConstants.snakeSize / 2, paint);
+    // canvas.drawRect(
+    //   Rect.fromLTWH(0, 0, GameConstants.snakeSize, GameConstants.snakeSize),
+    //   paint,
+    // );
   }
 }
