@@ -4,8 +4,6 @@ import '../../snake_game.dart';
 import 'dart:ui';
 import 'package:snakegame/components/ui/simple_button.dart';
 
-
-
 class AuthorCredits {
   final String name;
 
@@ -24,28 +22,34 @@ class AuthorScreen extends Component with HasGameReference<SnakeGame> {
     ),
   ];
 
-
-
   @override
   Future<void> onLoad() async {
-    double yPosition = 100;
+    final centerX = game.size.x / 2;
+    double yPosition = game.size.y * 0.3;
 
     for (var author in authors) {
       final nameText = TextComponent(
         text: author.name,
-        position: Vector2(130, yPosition + 20),
+        anchor: Anchor.center,
+        position: Vector2(centerX, yPosition),
         textRenderer: TextPaint(
-          style: const TextStyle(
-            fontSize: 30,
+          style: TextStyle(
+            fontSize: 24,
             color: Color(0xFFC8FFF5),
+            fontFamily: 'Roboto',
           ),
         ),
       );
       add(nameText);
-      yPosition += 100;
+      yPosition += 60;
     }
 
-    add(BackButton());
+    add(BackButton()
+      ..position = Vector2(
+        game.size.x / 2,
+        game.size.y * 0.85,
+      )
+      ..anchor = Anchor.center);
   }
 }
 
@@ -58,7 +62,6 @@ class BackButton extends SimpleButton with HasGameReference<SnakeGame> {
       ..lineTo(22, 32)
       ..moveTo(12, 20)
       ..lineTo(34, 20),
-    position: Vector2(50, 50),
   );
 
   @override
