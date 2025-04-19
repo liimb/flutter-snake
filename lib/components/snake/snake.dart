@@ -1,5 +1,6 @@
+import 'dart:math';
+
 import 'package:flame/components.dart';
-import 'package:flutter/material.dart';
 import 'package:snakegame/components/snake/snake_border.dart';
 import 'package:snakegame/components/snake/snake_head.dart';
 import 'package:snakegame/components/snake/snake_part.dart';
@@ -48,11 +49,11 @@ class Snake extends Component with HasGameRef<SnakeGame> {
       SnakePart part;
 
       if (i == 0) {
-        part = SnakeHead(pos.clone(), this, onYummyEaten);
+        part = SnakeHead(pos.clone(), Vector2.all(GameConstants.snakeSize + 7), this, onYummyEaten);
       } else if (i >= 3) {
-        part = SnakeBorder(pos.clone());
+        part = SnakeBorder(pos.clone(), Vector2.all(GameConstants.snakeSize));
       } else {
-        part = SnakePart(pos.clone());
+        part = SnakePart(pos.clone(), Vector2.all(GameConstants.snakeSize));
       }
 
       part.position = pos.clone();
@@ -79,6 +80,10 @@ class Snake extends Component with HasGameRef<SnakeGame> {
       } else {
         part.position += toTarget.normalized() * distance;
       }
+
+      if (toTarget.length != 0) {
+        part.targetAngle = getAngleFromVector(toTarget);
+      }
     }
 
     SnakePart head = snakeParts.first;
@@ -91,8 +96,24 @@ class Snake extends Component with HasGameRef<SnakeGame> {
       head.to += _direction * GameConstants.snakeSize;
 
       for (int i = 1; i < snakeParts.length; i++) {
-        snakeParts[i].to = snakeParts[i - 1].position.clone();
+          final prev = snakeParts[i - 1];
+          final current = snakeParts[i];
+
+          // Vector2 rawDirection = prev.position - current.position;
+          // Vector2 direction = _getGridAlignedDirection(rawDirection);
+          //
+          // GameLogger().w((direction).toString());
+
+          current.to = prev.position.clone();//- Vector2((GameConstants.snakeSize - GameConstants.snakeSize * current.scale.x) * direction.x, (GameConstants.snakeSize - GameConstants.snakeSize * current.scale.x) * direction.y);// * _direction.x, (GameConstants.snakeSize - current.size.x) * _direction.y);
       }
+    }
+  }
+
+  Vector2 _getGridAlignedDirection(Vector2 direction) {
+    if (direction.x.abs() > direction.y.abs()) {
+      return direction.x > 0 ? Vector2(1, 0) : Vector2(-1, 0);
+    } else {
+      return direction.y > 0 ? Vector2(0, 1) : Vector2(0, -1);
     }
   }
 
@@ -103,6 +124,16 @@ class Snake extends Component with HasGameRef<SnakeGame> {
         .toList();
   }
 
+  double baseScale = 1;
+  double scaleFactor = 0.97;
+  double minScale = 0.75;
+
+  double getScaled(int index) {
+    if (index < 4) return baseScale;
+    double size = baseScale * pow(scaleFactor, index - 4);
+    return size < minScale ? minScale : size;
+  }
+
   void addBorderPart() {
     if (snakeParts.isEmpty) return;
 
@@ -110,12 +141,26 @@ class Snake extends Component with HasGameRef<SnakeGame> {
 
     final tailPosition = lastPart.position.clone();
 
-    final newPart = SnakeBorder(tailPosition)
+    final size = Vector2.all(GameConstants.snakeSize);
+
+    final newPart = SnakeBorder(tailPosition, size)
       ..position = tailPosition
       ..to = tailPosition;
 
+    //newPart.scale = Vector2.all(getScaled(snakeParts.length));
+
     snakeParts.add(newPart);
+
+    GameLogger().i("snake length: ${snakeParts.length}");
+
     add(newPart);
+  }
+
+  double getAngleFromVector(Vector2 dir) {
+    if (dir.x == 0 && dir.y < 0) return -pi / 2; // вверх
+    if (dir.x == 0 && dir.y > 0) return pi / 2;  // вниз
+    if (dir.x < 0 && dir.y == 0) return pi;  // влево
+    return 0.0;                                  // вправо (по умолчанию)
   }
 
   TilePosition toTile(Vector2 pos) {
@@ -155,36 +200,6 @@ class Snake extends Component with HasGameRef<SnakeGame> {
 
     if (lastDir + newDir != Vector2.zero()) {
       _directionQueue.add(newDir);
-    }
-  }
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-
-    if (snakeParts.length < 2) return;
-
-    final double radius = GameConstants.snakeSize / 2;
-    final Paint connectorPaint = Paint()
-      ..color = const Color(0xFFfcc45c)
-      ..style = PaintingStyle.fill;
-
-    for (int i = 0; i < snakeParts.length - 1; i++) {
-      final partA = snakeParts[i];
-      final partB = snakeParts[i + 1];
-
-      final centerA = partA.position + Vector2.all(radius);
-      final centerB = partB.position + Vector2.all(radius);
-
-      final double distance = centerA.distanceTo(centerB);
-
-      final Vector2 connectorCenter = centerA - Vector2(distance, radius);
-
-      canvas.drawCircle(
-        Offset(connectorCenter.x, connectorCenter.y),
-        radius * 0.7,
-        connectorPaint,
-      );
     }
   }
 }

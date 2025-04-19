@@ -87,6 +87,8 @@ flutter:
     - assets/images/yummies/coffee_mocha.png
     - assets/images/yummies/coffee_raw.png
     - assets/images/yummies/coffee_tea.png
+    - assets/images/snake_part.png
+    - assets/images/snake_head.png
 
 
 
