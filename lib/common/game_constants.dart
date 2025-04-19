@@ -1,4 +1,6 @@
 class GameConstants {
-  static const double snakeSize = 30;
-  static const double snakeSpeed = 100;
+  static const double snakeSize = 27;
+  static const double snakeSpeed = 60;
+  static const bool debugMode = false;
+  static const int mapY = 100;
 }

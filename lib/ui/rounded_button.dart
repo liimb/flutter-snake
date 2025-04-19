@@ -22,7 +22,7 @@ class RoundedButton extends PositionComponent with TapCallbacks {
       (size.x - _textDrawable.width) / 2,
       (size.y - _textDrawable.height) / 2,
     );
-    _rrect = RRect.fromLTRBR(0, 0, size.x, size.y, Radius.circular(size.y / 2));
+    _rrect = RRect.fromLTRBR(0, 0, size.x, size.y, Radius.circular(size.y / 4));
     _bgPaint = Paint()..color = color;
     _borderPaint = Paint()
       ..style = PaintingStyle.stroke

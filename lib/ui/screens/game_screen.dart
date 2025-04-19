@@ -1,25 +1,56 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:snakegame/components/snake.dart';
+import 'package:snakegame/components/snake/snake.dart';
+import 'package:snakegame/components/yummy.dart';
 import 'package:snakegame/helpers/logger_service.dart';
-import 'package:snakegame/ui/tile_map.dart';
-import '../../components/SnakeDirection.dart';
+import 'package:snakegame/components/map/tile_map.dart';
+import '../../common/direction.dart';
+import '../../components/ui/back_button.dart';
+import '../../components/ui/pause_button.dart';
 import '../../snake_game.dart';
+import 'dart:async';
 
 class GameScreen extends World with HasGameReference<SnakeGame>, TapCallbacks, DragCallbacks {
-
   late final TileMap _tileMap;
   late final Snake _snake;
-  late SnakeDirection snakeDirection = SnakeDirection();
   Vector2? _dragStartPosition;
   Vector2? _lastDragPosition;
 
+  final hudComponents = <Component>[];
+
+  @override
+  void onMount() {
+    super.onMount();
+    hudComponents.addAll([
+      BackButton(),
+      PauseButton(),
+    ]);
+    game.camera.viewport.addAll(hudComponents);
+  }
+
+  @override
+  void onRemove() {
+    game.camera.viewport.removeAll(hudComponents);
+    super.onRemove();
+  }
+
   @override
   Future<void> onLoad() async {
-    addAll([
-      _tileMap = TileMap(game),
-      _snake = Snake(Vector2(0, 0), 200)
-    ]);
+    super.onLoad();
+    loadGame();
+  }
+
+  Future<void> loadGame() async {
+    _tileMap = TileMap(game);
+    add(_tileMap);
+    _snake = Snake(
+        _tileMap,
+        (_tileMap.columns / 3).floor(),
+            (SpriteComponent yummy) {remove(yummy); spawnYummy();}
+    );
+    add(_snake);
+
+    spawnYummy();
   }
 
   @override
@@ -28,24 +59,30 @@ class GameScreen extends World with HasGameReference<SnakeGame>, TapCallbacks, D
     _snake.update(dt);
   }
 
-  // Обработка тапов (опционально)
-  @override
-  void onTapUp(TapUpEvent event) {
-    super.onTapUp(event);
+  void spawnYummy() {
+    Vector2 pos = _calculateYummyPosition();
 
-    final position = event.localPosition;
-    final width = game.size.x;
-    final height = game.size.y;
+    final currentYummy = Yummy(pos);
+    add(currentYummy);
 
-    if (position.y < height / 3) {
-      snakeDirection.changeDirection(Direction.up);
-    } else if (position.y > height * 2 / 3) {
-      snakeDirection.changeDirection(Direction.down);
-    } else if (position.x < width / 3) {
-      snakeDirection.changeDirection(Direction.left);
-    } else if (position.x > width * 2 / 3) {
-      snakeDirection.changeDirection(Direction.right);
-    }
+    GameLogger().i("yummy spawn: $pos");
+  }
+
+  Vector2 _calculateYummyPosition() {
+    final occupied = _snake.getOccupiedGridPositions(_tileMap);
+    final freeCells = _tileMap.getFreeCells(occupied);
+
+    if (freeCells.isEmpty) return _tileMap.center;
+
+    final cell = (freeCells..shuffle()).first;
+    final rect = _tileMap.boardCells[cell.i][cell.j];
+
+    final pos = Vector2(
+      _tileMap.position.x + rect.left,
+      _tileMap.position.y + rect.top,
+    );
+
+    return pos;
   }
 
   @override
@@ -63,6 +100,7 @@ class GameScreen extends World with HasGameReference<SnakeGame>, TapCallbacks, D
 
   @override
   void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
     if (_dragStartPosition == null || _lastDragPosition == null) return;
 
     final delta = _lastDragPosition! - _dragStartPosition!;
@@ -71,22 +109,21 @@ class GameScreen extends World with HasGameReference<SnakeGame>, TapCallbacks, D
 
     if (delta.x.abs() > delta.y.abs()) {
       if (delta.x > 0) {
-        snakeDirection.changeDirection(Direction.right);
+        _onSnakeSwipe(Direction.right);
       } else {
-        snakeDirection.changeDirection(Direction.left);
+        _onSnakeSwipe(Direction.left);
       }
     } else {
       if (delta.y > 0) {
-        snakeDirection.changeDirection(Direction.down);
+        _onSnakeSwipe(Direction.down);
       } else {
-        snakeDirection.changeDirection(Direction.up);
+        _onSnakeSwipe(Direction.up);
       }
     }
+  }
 
-    GameLogger().e(snakeDirection.direction.name);
-
-    _snake.onSwipe(snakeDirection.direction);
-
-    super.onDragEnd(event);
+  void _onSnakeSwipe(Direction dir) {
+    GameLogger().e(dir.name);
+    _snake.onSwipe(dir);
   }
 }
