@@ -6,24 +6,24 @@ class RoundedButton extends PositionComponent with TapCallbacks {
   RoundedButton({
     required this.text,
     required this.action,
+    required this.textRenderer,
     required Color color,
     required Color borderColor,
-    TextStyle? textStyle,
     super.position,
-    super.anchor = Anchor.center, required TextPaint textRenderer,
+    super.anchor = Anchor.center,
+    double? width,
+    double? height,
+  }) : _textDrawable = textRenderer.toTextPainter(text) {
+    size = Vector2(
+      width ?? _textDrawable.width + 40,
+      height ?? _textDrawable.height + 20,
+    );
 
-  }) : _textDrawable = TextPaint(
-    style: TextStyle(
-      fontSize: 20,
-      color: Color(0xFF000000),
-      fontWeight: FontWeight.w800,
-    ),
-  ).toTextPainter(text) {
-    size = Vector2(150, 40);
     _textOffset = Offset(
       (size.x - _textDrawable.width) / 2,
       (size.y - _textDrawable.height) / 2,
     );
+
     _rrect = RRect.fromLTRBR(0, 0, size.x, size.y, Radius.circular(size.y / 4));
     _bgPaint = Paint()..color = color;
     _borderPaint = Paint()
@@ -32,9 +32,9 @@ class RoundedButton extends PositionComponent with TapCallbacks {
       ..color = borderColor;
   }
 
-
   final String text;
   final void Function() action;
+  final TextPaint textRenderer;
   final TextPainter _textDrawable;
   late final Offset _textOffset;
   late final RRect _rrect;
