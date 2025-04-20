@@ -5,19 +5,20 @@ import 'package:snakegame/components/snake/snake_part.dart';
 import '../../common/game_constants.dart';
 
 class SnakeBorder extends SnakePart with CollisionCallbacks {
-  SnakeBorder(super.to);
+  SnakeBorder(super.to, super.mySize);
 
   @override
-  void onLoad() {
-    // add(RectangleHitbox(
-    //     size: Vector2(GameConstants.snakeSize, GameConstants.snakeSize),
-    //     collisionType: CollisionType.passive
-    // ));
+  Future<void> onLoad() async {
+    await super.onLoad();
 
-    add(CircleHitbox(
-        radius: GameConstants.snakeSize * 0.5,
-        anchor: Anchor.center,
+    anchor = Anchor.center;
+
+    add(RectangleHitbox(
+        //TODO хитбокс не по центру
+        size: Vector2.all(GameConstants.snakeSize * scale.x),
         collisionType: CollisionType.passive
     ));
+
+    size = mySize;
   }
 }

@@ -91,6 +91,8 @@ flutter:
     - assets/images/icons/vika.png
     - assets/fonts/Montserrat-Regular.ttf
     - assets/fonts/Roboto-Regular.ttf
+    - assets/images/snake_part.png
+    - assets/images/snake_head.png
 
 
 
