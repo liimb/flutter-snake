@@ -13,6 +13,7 @@ class MenuScreen extends Component with HasGameReference<SnakeGame> {
           style: const TextStyle(
             fontSize: 64,
             color: Color(0xFFC8FFF5),
+            fontFamily: 'PixelifySans',
             fontWeight: FontWeight.w900,
           ),
         ),
@@ -20,8 +21,16 @@ class MenuScreen extends Component with HasGameReference<SnakeGame> {
       ),
       _button1 = RoundedButton(
         text: 'Играть',
+        textRenderer: TextPaint(
+        style: const TextStyle(
+        fontSize: 64,
+        color: Color(0xFFC8FFF5),
+        fontFamily: 'PixelifySans',
+        fontWeight: FontWeight.w900,
+        ),
+    ),
+
         action: () => {
-          //game.startGame(),
           game.router.pushReplacementNamed('game')
         },
         color: const Color(0xffadde6c),
@@ -29,6 +38,14 @@ class MenuScreen extends Component with HasGameReference<SnakeGame> {
       ),
       _button2 = RoundedButton(
         text: 'Авторы',
+        textRenderer: TextPaint(
+          style: const TextStyle(
+            fontSize: 64,
+            color: Color(0xFFC8FFF5),
+            fontFamily: 'PixelifySans',
+            fontWeight: FontWeight.w900,
+          ),
+        ),
         action: () => game.router.pushReplacementNamed('authors'),
         color: const Color(0xffdebe6c),
         borderColor: const Color(0xfffff4c7),
