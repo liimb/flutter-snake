@@ -5,6 +5,15 @@ import '../rounded_button.dart';
 
 class MenuScreen extends Component with HasGameReference<SnakeGame> {
 
+  final pixelTextStyle = TextPaint(
+    style: const TextStyle(
+      fontSize: 32,
+      color: Color(0xFFC8FFF5),
+      fontFamily: 'PixelifySans',
+      fontWeight: FontWeight.w900,
+    ),
+  );
+
   MenuScreen() {
     addAll([
       _logo = TextComponent(
@@ -13,25 +22,29 @@ class MenuScreen extends Component with HasGameReference<SnakeGame> {
           style: const TextStyle(
             fontSize: 64,
             color: Color(0xFFC8FFF5),
+            fontFamily: 'PixelifySans',
             fontWeight: FontWeight.w900,
           ),
         ),
         anchor: Anchor.center,
       ),
-      _button1 = RoundedButton(
+    _button1 = RoundedButton(
         text: 'Играть',
-        action: () => {
-          //game.startGame(),
-          game.router.pushReplacementNamed('game')
-        },
-        color: const Color(0xffadde6c),
+        textRenderer: pixelTextStyle,
+        action: () => game.router.pushReplacementNamed('game'),
+        color: const Color(0xFF4B8178),
         borderColor: const Color(0xffedffab),
-      ),
+        width: 200,
+        height: 50,
+    ),
       _button2 = RoundedButton(
         text: 'Авторы',
+        textRenderer: pixelTextStyle,
         action: () => game.router.pushReplacementNamed('authors'),
-        color: const Color(0xffdebe6c),
-        borderColor: const Color(0xfffff4c7),
+        color: const Color(0xFF3D5C3B),
+        borderColor: const Color(0xffedffab),
+        width: 200,
+        height: 50,
       ),
     ]);
   }
