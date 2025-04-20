@@ -87,6 +87,10 @@ flutter:
     - assets/images/yummies/coffee_mocha.png
     - assets/images/yummies/coffee_raw.png
     - assets/images/yummies/coffee_tea.png
+    - assets/images/icons/Artemiy.png
+    - assets/images/icons/vika.png
+    - assets/fonts/Montserrat-Regular.ttf
+    - assets/fonts/Roboto-Regular.ttf
 
 
 
@@ -101,10 +105,19 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  fonts:
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat-Regular.ttf
+          weight: 400
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto-Regular.ttf
+          weight: 400
+    - family: PixelifySans
+      fonts:
+        - asset: assets/fonts/PixelifySans-Regular.ttf
+          weight: 400
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro
