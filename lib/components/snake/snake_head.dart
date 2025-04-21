@@ -34,8 +34,8 @@ class SnakeHead extends SnakePart with CollisionCallbacks {
     anchor = Anchor.center;
 
     add(CircleHitbox(
-      position: Vector2(size.x * 0.0, size.x * 0.15),
-      radius: size.x * 0.3,
+      position: Vector2(size.x * 0.1, size.x * 0.2),
+      radius: size.x * 0.25,
       collisionType: CollisionType.active,
     ));
   }
@@ -57,6 +57,7 @@ class SnakeHead extends SnakePart with CollisionCallbacks {
   void deathSnake() {
     GameLogger().i("death");
     snake.speed = 0;
-    game.router.pushReplacementNamed('menu');
+    //game.router.pushReplacementNamed("game");
+    game.router.pushNamed('lose');
   }
 }

@@ -21,7 +21,11 @@ class StorageService {
     await _prefs?.setInt(_score, score);
   }
 
-  Future<String?> getRegisterUUID() async {
-    return _prefs?.getString(_score);
+  Future<int> getScore() async {
+    int? score = _prefs?.getInt(_score);
+    if(score == null) {
+      return 0;
+    }
+    return score;
   }
 }

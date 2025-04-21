@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:snakegame/components/map/border_tile.dart';
+import 'package:snakegame/components/map/standart_tile.dart';
 import 'package:snakegame/components/map/tile_position.dart';
 import 'package:snakegame/helpers/logger_service.dart';
 
@@ -28,14 +29,16 @@ class TileMap extends PositionComponent {
 
     GameLogger().i("tilemap load");
 
-    position = Vector2(-gameRef.size.x / 2, -gameRef.size.y / 2  + (GameConstants.mapY));
-
     primary = Paint()..color = Color(0xFF5696ab);
     secondary = Paint()..color = Color(0xFF93bcc7);
     border = Paint()..color = Color(0xFF043c6c);
 
     columns = (gameRef.size.x / cellSize).floor();
     rows = (gameRef.size.y / cellSize).floor() - (GameConstants.mapY / cellSize).floor();
+
+    final mapWidth = columns * cellSize;
+
+    position = Vector2(-mapWidth/2, -gameRef.size.y / 2  + (GameConstants.mapY));
 
     GameLogger().i("tilemap size: $columns x $rows");
 
@@ -56,6 +59,9 @@ class TileMap extends PositionComponent {
         if (isBorder) {
           final block = BorderTile(rect);
           add(block);
+        } else {
+          final tile = StandartTile(rect);
+          add(tile);
         }
         return rect;
       });
@@ -79,14 +85,14 @@ class TileMap extends PositionComponent {
     return freeCells;
   }
 
-  @override
-  void render(Canvas canvas) {
-    for (int i = 0; i < columns; i++) {
-      for (int j = 0; j < rows; j++) {
-        final rect = boardCells[i][j];
-        final paint = (i == 0 || i == columns - 1 || j == 0 || j == rows - 1) ? border : ((i + j).isEven ? secondary : primary);
-        canvas.drawRect(rect, paint);
-      }
-    }
-  }
+  // @override
+  // void render(Canvas canvas) {
+  //   for (int i = 0; i < columns; i++) {
+  //     for (int j = 0; j < rows; j++) {
+  //       final rect = boardCells[i][j];
+  //       final paint = (i == 0 || i == columns - 1 || j == 0 || j == rows - 1) ? border : ((i + j).isEven ? secondary : primary);
+  //       canvas.drawRect(rect, paint);
+  //     }
+  //   }
+  // }
 }
