@@ -1,7 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import '../../snake_game.dart';
-import 'dart:ui';
 import 'package:snakegame/components/ui/simple_button.dart';
 
 class AuthorCredits {

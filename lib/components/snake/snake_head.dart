@@ -1,39 +1,43 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:snakegame/common/game_constants.dart';
 import 'package:snakegame/components/map/border_tile.dart';
 import 'package:snakegame/components/snake/snake.dart';
 import 'package:snakegame/components/snake/snake_border.dart';
 import 'package:snakegame/components/snake/snake_part.dart';
 import 'package:snakegame/components/yummy.dart';
 import 'package:snakegame/helpers/logger_service.dart';
-import 'package:snakegame/snake_game.dart';
 
-class SnakeHead extends SnakePart with CollisionCallbacks, HasGameReference<SnakeGame> {
-  SnakeHead(super.to, this.snake, this.onYummyEaten);
+class SnakeHead extends SnakePart with CollisionCallbacks {
+  SnakeHead(super.to, super.mySize, this.snake, this.onYummyEaten);
 
   late final Snake snake;
   late final void Function(SpriteComponent yummy) onYummyEaten;
 
   @override
-  void onLoad() {
-    final inset = GameConstants.snakeSize / 4;
-    final hitboxSize = Vector2(
-      GameConstants.snakeSize - inset * 2,
-      GameConstants.snakeSize - inset * 2,
-    );
+  Future<void> onLoad() async {
+    await super.onLoad();
 
-    final hitboxPosition = Vector2(inset, inset);
+    size = mySize;
 
-    // add(RectangleHitbox(
-    //   position: hitboxPosition,
-    //   size: hitboxSize,
-    //   collisionType: CollisionType.active,
-    // ));
+    sprite = await game.loadSprite("snake_head.png");
 
-    add(
-      CircleHitbox(collisionType: CollisionType.active, radius: hitboxSize.x / 2, anchor: Anchor.center)
-    );
+    final originalSize = sprite!.originalSize;
+
+    priority = 1;
+
+    final fixedHeight = mySize.x;
+    final scaleFactor = fixedHeight / originalSize.y;
+    final width = originalSize.x * scaleFactor;
+
+    size = Vector2(width, fixedHeight);
+
+    anchor = Anchor.center;
+
+    add(CircleHitbox(
+      position: Vector2(size.x * 0.0, size.x * 0.15),
+      radius: size.x * 0.3,
+      collisionType: CollisionType.active,
+    ));
   }
 
   @override
@@ -52,7 +56,7 @@ class SnakeHead extends SnakePart with CollisionCallbacks, HasGameReference<Snak
 
   void deathSnake() {
     GameLogger().i("death");
-    //snake.speed = 0;
+    snake.speed = 0;
     game.router.pushReplacementNamed('menu');
   }
 }

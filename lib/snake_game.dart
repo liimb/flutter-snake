@@ -6,7 +6,6 @@ import 'package:snakegame/ui/screens/authors_screen.dart';
 
 class SnakeGame extends FlameGame with TapDetector, HasCollisionDetection {
   late final RouterComponent router;
-  //privet!!!
 
   @override
   Future<void> onLoad() async {
