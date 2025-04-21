@@ -1,6 +1,5 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:snakegame/common/game_constants.dart';
 import 'package:snakegame/components/map/border_tile.dart';
 import 'package:snakegame/components/snake/snake.dart';
 import 'package:snakegame/components/snake/snake_border.dart';
@@ -26,8 +25,7 @@ class SnakeHead extends SnakePart with CollisionCallbacks {
 
     priority = 1;
 
-    // Пример: фиксируем высоту (или ширину) и масштабируем другую сторону
-    final fixedHeight = mySize.x; // например, 64
+    final fixedHeight = mySize.x;
     final scaleFactor = fixedHeight / originalSize.y;
     final width = originalSize.x * scaleFactor;
 
@@ -35,23 +33,11 @@ class SnakeHead extends SnakePart with CollisionCallbacks {
 
     anchor = Anchor.center;
 
-    final inset = GameConstants.snakeSize / 4;
-    final hitboxSize = Vector2(
-      GameConstants.snakeSize - inset * 2,
-      GameConstants.snakeSize - inset * 2,
-    );
-
-    final hitboxPosition = Vector2(inset, inset);
-
-    add(RectangleHitbox(
-      position: hitboxPosition,
-      size: hitboxSize,
+    add(CircleHitbox(
+      position: Vector2(size.x * 0.0, size.x * 0.15),
+      radius: size.x * 0.3,
       collisionType: CollisionType.active,
     ));
-
-    // add(
-    //   CircleHitbox(collisionType: CollisionType.active, radius: hitboxSize.x / 2, anchor: Anchor.center)
-    // );
   }
 
   @override
@@ -70,7 +56,7 @@ class SnakeHead extends SnakePart with CollisionCallbacks {
 
   void deathSnake() {
     GameLogger().i("death");
-    //snake.speed = 0;
+    snake.speed = 0;
     game.router.pushReplacementNamed('menu');
   }
 }

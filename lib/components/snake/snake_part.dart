@@ -1,10 +1,7 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:snakegame/snake_game.dart';
-
-import '../../common/game_constants.dart';
 
 class SnakePart extends SpriteComponent with HasGameReference<SnakeGame> {
   SnakePart(this.to, this.mySize);
@@ -42,15 +39,4 @@ class SnakePart extends SpriteComponent with HasGameReference<SnakeGame> {
     double difference = (target - current + pi) % (2 * pi) - pi;
     return current + difference * t;
   }
-
-  // @override
-  // void render(Canvas canvas) {
-  //   super.render(canvas);
-  //   final paint = Paint()..color = const Color(0xFFfcc45c);
-  //   canvas.drawCircle(Offset(0, 0), GameConstants.snakeSize / 2, paint);
-  //   // canvas.drawRect(
-  //   //   Rect.fromLTWH(0, 0, GameConstants.snakeSize, GameConstants.snakeSize),
-  //   //   paint,
-  //   // );
-  // }
 }

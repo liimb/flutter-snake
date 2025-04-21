@@ -12,7 +12,7 @@ import '../../common/direction.dart';
 import '../../common/game_constants.dart';
 import '../../snake_game.dart';
 
-class Snake extends Component with HasGameRef<SnakeGame> {
+class Snake extends Component with HasGameReference<SnakeGame> {
   Snake(this._tilemap, this.snakeLength, this.onYummyEaten, {super.key});
 
   final TileMap _tilemap;
@@ -72,16 +72,16 @@ class Snake extends Component with HasGameRef<SnakeGame> {
 
       if (part.to == part.position) continue;
 
-      final toTarget = part.to - part.position;
+      final toTarget = part.to - part.position; // - Vector2((GameConstants.snakeSize - GameConstants.snakeSize * part.scale.x) * _getGridAlignedDirection(part.position - part.to).x, (GameConstants.snakeSize - GameConstants.snakeSize * part.scale.x) * _getGridAlignedDirection(part.position - part.to).y);
       final distance = speed * dt;
 
       if (toTarget.length <= distance) {
-        part.position = part.to.clone();
+        part.position = part.to.clone();// - Vector2((GameConstants.snakeSize - GameConstants.snakeSize * part.scale.x) * _getGridAlignedDirection(part.position - part.to).x, (GameConstants.snakeSize - GameConstants.snakeSize * part.scale.x) * _getGridAlignedDirection(part.position - part.to).y);
       } else {
-        part.position += toTarget.normalized() * distance;
+        part.position += toTarget.normalized() * distance;// - Vector2((GameConstants.snakeSize - GameConstants.snakeSize * part.scale.x) * _getGridAlignedDirection(part.position - part.to).x, (GameConstants.snakeSize - GameConstants.snakeSize * part.scale.x) * _getGridAlignedDirection(part.position - part.to).y);
       }
 
-      if (toTarget.length != 0) {
+      if (toTarget.length >= distance + 0.1) {
         part.targetAngle = getAngleFromVector(toTarget);
       }
     }

@@ -1,10 +1,12 @@
 import 'package:flame/components.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flame/events.dart';
 import 'package:snakegame/components/snake/snake.dart';
 import 'package:snakegame/components/yummy.dart';
 import 'package:snakegame/helpers/logger_service.dart';
 import 'package:snakegame/components/map/tile_map.dart';
 import '../../common/direction.dart';
+import '../../common/game_constants.dart';
 import '../../components/ui/back_button.dart';
 import '../../components/ui/pause_button.dart';
 import '../../snake_game.dart';
@@ -15,6 +17,7 @@ class GameScreen extends World with HasGameReference<SnakeGame>, TapCallbacks, D
   late final Snake _snake;
   Vector2? _dragStartPosition;
   Vector2? _lastDragPosition;
+  late final TextComponent textScore;
 
   final hudComponents = <Component>[];
 
@@ -22,8 +25,9 @@ class GameScreen extends World with HasGameReference<SnakeGame>, TapCallbacks, D
   void onMount() {
     super.onMount();
     hudComponents.addAll([
-      BackButton(),
-      PauseButton(),
+      BackButton(Vector2.all(GameConstants.mapY / 4)),
+      PauseButton(Vector2(game.size.x - GameConstants.mapY / 1.5, GameConstants.mapY / 4)),
+      textScore
     ]);
     game.camera.viewport.addAll(hudComponents);
   }
@@ -50,6 +54,21 @@ class GameScreen extends World with HasGameReference<SnakeGame>, TapCallbacks, D
     );
     add(_snake);
 
+    textScore = TextComponent(
+        position: Vector2(game.size.x / 2, GameConstants.mapY / 2), 
+        text: "0",
+        textRenderer: TextPaint(
+          style: const TextStyle(
+            fontSize: 64,
+            color: Color(0xFFC8FFF5),
+            fontFamily: 'PixelifySans',
+            fontWeight: FontWeight.w900,
+          ),
+        ),
+        anchor: Anchor.center,
+        //scale: Vector2.all(1.5)
+    );
+
     spawnYummy();
   }
 
@@ -64,6 +83,8 @@ class GameScreen extends World with HasGameReference<SnakeGame>, TapCallbacks, D
 
     final currentYummy = Yummy(pos);
     add(currentYummy);
+
+    textScore.text = "${_snake.snakeParts.length - _snake.snakeLength}";
 
     GameLogger().i("yummy spawn: $pos");
   }
