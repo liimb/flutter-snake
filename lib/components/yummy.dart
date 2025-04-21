@@ -14,7 +14,6 @@ class Yummy extends SpriteComponent with HasGameReference<SnakeGame>, CollisionC
     size: Vector2.all(GameConstants.snakeSize),
   );
 
-  static final _random = Random();
   static final List<String> spritePaths = [
     'yummies/boba_coffee.png',
     'yummies/boba_mango.png',
@@ -50,7 +49,7 @@ class Yummy extends SpriteComponent with HasGameReference<SnakeGame>, CollisionC
 
     anchor = Anchor.center;
     position += size / 2;
-    sprite = await game.loadSprite(spritePaths[_random.nextInt(spritePaths.length)]);
+    sprite = game.getRandomYummySprite();
 
     final inset = GameConstants.snakeSize / 4;
 

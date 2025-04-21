@@ -94,13 +94,147 @@ flutter:
     - assets/images/yummies/coffee_mocha.png
     - assets/images/yummies/coffee_raw.png
     - assets/images/yummies/coffee_tea.png
+    - assets/images/yummies/eggs_brown.png
+    - assets/images/yummies/eggs_fried.png
+    - assets/images/yummies/eggs_overeasy.png
+    - assets/images/yummies/eggs_scrambled.png
+    - assets/images/yummies/eggs_softboiled.png
+    - assets/images/yummies/eggs_white.png
+    - assets/images/yummies/fruit_apple.png
+    - assets/images/yummies/fruit_apple-slice.png
+    - assets/images/yummies/fruit_banana.png
+    - assets/images/yummies/fruit_blueberry.png
+    - assets/images/yummies/fruit_cherry.png
+    - assets/images/yummies/fruit_grape_red.png
+    - assets/images/yummies/fruit_greengrape.png
+    - assets/images/yummies/fruit_kiwi.png
+    - assets/images/yummies/fruit_lemon.png
+    - assets/images/yummies/fruit_lime.png
+    - assets/images/yummies/fruit_orange.png
+    - assets/images/yummies/fruit_orange_slice.png
+    - assets/images/yummies/fruit_peach.png
+    - assets/images/yummies/fruit_strawberry.png
+    - assets/images/yummies/fruit_watermelon.png
+    - assets/images/yummies/fruit_watermelon_slice.png
+    - assets/images/yummies/icecream_1scoop.png
+    - assets/images/yummies/icecream_2scoops.png
+    - assets/images/yummies/icecream_3scoops.png
+    - assets/images/yummies/jam_blueberry.png
+    - assets/images/yummies/jam_grape.png
+    - assets/images/yummies/jam_kiwi.png
+    - assets/images/yummies/jam_peach.png
+    - assets/images/yummies/jam_strawberry.png
+    - assets/images/yummies/onigiri_1.png
+
     - assets/images/icons/Artemiy.png
     - assets/images/icons/vika.png
+    - assets/images/icons/cup.png
     - assets/fonts/Montserrat-Regular.ttf
     - assets/fonts/Roboto-Regular.ttf
     - assets/images/snake_part.png
     - assets/images/snake_head.png
 
+    - assets/images/ground/tile043.png
+    - assets/images/ground/tile045.png
+    - assets/images/ground/tile056.png
+    - assets/images/ground/tile057.png
+    - assets/images/ground/tile088.png
+    - assets/images/ground/tile090.png
+    - assets/images/ground/tile091.png
+    - assets/images/ground/tile092.png
+    - assets/images/ground/tile093.png
+    - assets/images/ground/tile094.png
+    - assets/images/ground/tile102.png
+    - assets/images/ground/tile103.png
+    - assets/images/ground/tile104.png
+    - assets/images/ground/tile105.png
+    - assets/images/ground/tile106.png
+    - assets/images/ground/tile107.png
+    - assets/images/ground/tile115.png
+    - assets/images/ground/tile116.png
+    - assets/images/ground/tile120.png
+    - assets/images/ground/tile121.png
+    - assets/images/ground/tile122.png
+    - assets/images/ground/tile123.png
+    - assets/images/ground/tile124.png
+    - assets/images/ground/tile125.png
+    - assets/images/ground/tile126.png
+    - assets/images/ground/tile127.png
+    - assets/images/ground/tile128.png
+    - assets/images/ground/tile129.png
+    - assets/images/ground/tile130.png
+    - assets/images/ground/tile131.png
+    - assets/images/ground/tile133.png
+    - assets/images/ground/tile134.png
+    - assets/images/ground/tile144.png
+    - assets/images/ground/tile145.png
+    - assets/images/ground/tile146.png
+    - assets/images/ground/tile147.png
+    - assets/images/ground/tile149.png
+    - assets/images/ground/tile150.png
+    - assets/images/ground/tile152.png
+    - assets/images/ground/tile153.png
+    - assets/images/ground/tile154.png
+    - assets/images/ground/tile155.png
+    - assets/images/ground/tile156.png
+    - assets/images/ground/tile157.png
+    - assets/images/ground/tile158.png
+    - assets/images/ground/tile159.png
+    - assets/images/ground/tile160.png
+    - assets/images/ground/tile161.png
+    - assets/images/ground/tile162.png
+    - assets/images/ground/tile163.png
+    - assets/images/ground/tile168.png
+    - assets/images/ground/tile169.png
+    - assets/images/ground/tile170.png
+    - assets/images/ground/tile171.png
+    - assets/images/ground/tile172.png
+    - assets/images/ground/tile173.png
+    - assets/images/ground/tile174.png
+    - assets/images/ground/tile175.png
+    - assets/images/ground/tile176.png
+    - assets/images/ground/tile177.png
+    - assets/images/ground/tile178.png
+    - assets/images/ground/tile179.png
+    - assets/images/ground/tile181.png
+    - assets/images/ground/tile182.png
+    - assets/images/ground/tile192.png
+    - assets/images/ground/tile193.png
+    - assets/images/ground/tile194.png
+    - assets/images/ground/tile195.png
+    - assets/images/ground/tile196.png
+    - assets/images/ground/tile197.png
+    - assets/images/ground/tile198.png
+    - assets/images/ground/tile200.png
+    - assets/images/ground/tile203.png
+    - assets/images/ground/tile206.png
+    - assets/images/ground/tile208.png
+    - assets/images/ground/tile209.png
+    - assets/images/ground/tile210.png
+    - assets/images/ground/tile211.png
+    - assets/images/ground/tile213.png
+    - assets/images/ground/tile214.png
+    - assets/images/ground/tile220.png
+    - assets/images/ground/tile223.png
+    - assets/images/ground/tile224.png
+    - assets/images/ground/tile225.png
+    - assets/images/ground/tile226.png
+    - assets/images/ground/tile227.png
+    - assets/images/ground/tile229.png
+    - assets/images/ground/tile230.png
+    - assets/images/ground/tile233.png
+    - assets/images/ground/tile234.png
+    - assets/images/ground/tile240.png
+    - assets/images/ground/tile243.png
+    - assets/images/ground/tile246.png
+    - assets/images/ground/tile248.png
+    - assets/images/ground/tile249.png
+    - assets/images/ground/tile250.png
+    - assets/images/ground/tile251.png
+
+    - assets/images/border/stone.png
+    - assets/images/border/stone2.png
+    - assets/images/border/abyss.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

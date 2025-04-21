@@ -13,8 +13,8 @@ class SnakeBorder extends SnakePart with CollisionCallbacks {
     size = mySize;
 
     add(CircleHitbox(
-        position: Vector2(size.x * 0.1, size.x * 0.1),
-        radius: size.x * 0.4,
+        position: Vector2(size.x * 0.15, size.x * 0.15),
+        radius: size.x * 0.35,
         collisionType: CollisionType.passive
     ));
   }

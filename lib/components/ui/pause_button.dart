@@ -4,7 +4,7 @@ import 'package:snakegame/components/ui/simple_button.dart';
 import 'package:snakegame/snake_game.dart';
 
 class PauseButton extends SimpleButton with HasGameReference<SnakeGame> {
-  PauseButton(Vector2 pos)
+  PauseButton(Vector2 pos, this.act)
       : super(
     Path()
       ..moveTo(14, 10)
@@ -14,15 +14,12 @@ class PauseButton extends SimpleButton with HasGameReference<SnakeGame> {
     position: pos,
   );
 
+  Function() act;
   bool isPaused = false;
 
   @override
   void action() {
-    if (isPaused) {
-      game.router.pop();
-    } else {
-      game.router.pushNamed('pause');
-    }
-    isPaused = !isPaused;
+    act();
+    game.router.pushNamed('pause');
   }
 }
