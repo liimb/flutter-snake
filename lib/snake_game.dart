@@ -5,6 +5,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:snakegame/components/yummy.dart';
 import 'package:snakegame/ui/screens/game_screen.dart';
+import 'package:snakegame/ui/screens/lose_screen.dart';
 import 'package:snakegame/ui/screens/menu_screen.dart';
 import 'package:snakegame/ui/screens/authors_screen.dart';
 import 'package:snakegame/ui/screens/pause_screen.dart';
@@ -31,8 +32,9 @@ class SnakeGame extends FlameGame with TapDetector, HasCollisionDetection {
       router = RouterComponent(
         routes: {
           'menu': Route(MenuScreen.new, maintainState: false),
-          'game': WorldRoute(GameScreen.new, maintainState: false),
+          'game': WorldRoute(() {GameLogger().i("game screen in route");return GameScreen();}, maintainState: false),
           'pause': Route(PauseScreen.new),
+          'lose': Route(LoseScreen.new),
           'authors': Route(AuthorScreen.new),
         },
         initialRoute: 'menu',
@@ -64,4 +66,8 @@ class SnakeGame extends FlameGame with TapDetector, HasCollisionDetection {
     return yummySprites[_random.nextInt(yummySprites.length)];
   }
 
+  void restartGame() {
+    world.removeFromParent();
+    world = GameScreen();
+  }
 }

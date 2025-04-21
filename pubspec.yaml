@@ -125,6 +125,48 @@ flutter:
     - assets/images/yummies/jam_peach.png
     - assets/images/yummies/jam_strawberry.png
     - assets/images/yummies/onigiri_1.png
+    - assets/images/yummies/onigiri_2.png
+    - assets/images/yummies/onigiri_3.png
+    - assets/images/yummies/onigiri_4.png
+    - assets/images/yummies/onigiri_5.png
+    - assets/images/yummies/pastry_baguette.png
+    - assets/images/yummies/pastry_bread.png
+    - assets/images/yummies/pastry_brioche.png
+    - assets/images/yummies/pastry_croissant.png
+    - assets/images/yummies/pastry_pretzel.png
+    - assets/images/yummies/popsicle_blue.png
+    - assets/images/yummies/popsicle_green.png
+    - assets/images/yummies/popsicle_pink.png
+    - assets/images/yummies/popsicle_red.png
+    - assets/images/yummies/popsicle_yellow.png
+    - assets/images/yummies/soda_coke.png
+    - assets/images/yummies/soda_fanta.png
+    - assets/images/yummies/soda_pepsi.png
+    - assets/images/yummies/soda_sprite.png
+    - assets/images/yummies/soymilk_almond.png
+    - assets/images/yummies/soymilk_banana.png
+    - assets/images/yummies/soymilk_choco.png
+    - assets/images/yummies/soymilk_chocomint.png
+    - assets/images/yummies/soymilk_coffee.png
+    - assets/images/yummies/soymilk_mango.png
+    - assets/images/yummies/soymilk_match.png
+    - assets/images/yummies/soymilk_peach.png
+    - assets/images/yummies/soymilk_soy.png
+    - assets/images/yummies/soymilk_strawberry.png
+    - assets/images/yummies/vegetable_bellpepper_green.png
+    - assets/images/yummies/vegetable_bellpepper_red.png
+    - assets/images/yummies/vegetable_bellpepper_yellow.png
+    - assets/images/yummies/vegetable_carrot.png
+    - assets/images/yummies/vegetable_corn.png
+    - assets/images/yummies/vegetable_cucumber.png
+    - assets/images/yummies/vegetable_eggplant.png
+    - assets/images/yummies/vegetable_garlic.png
+    - assets/images/yummies/vegetable_ginger.png
+    - assets/images/yummies/vegetable_jalapeno.png
+    - assets/images/yummies/vegetable_onion.png
+    - assets/images/yummies/vegetable_potato.png
+    - assets/images/yummies/vegetable_pumpkin.png
+    - assets/images/yummies/vegetable_tomato.png
 
     - assets/images/icons/Artemiy.png
     - assets/images/icons/vika.png

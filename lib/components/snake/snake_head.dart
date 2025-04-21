@@ -57,6 +57,7 @@ class SnakeHead extends SnakePart with CollisionCallbacks {
   void deathSnake() {
     GameLogger().i("death");
     snake.speed = 0;
-    game.router.pushReplacementNamed('menu');
+    //game.router.pushReplacementNamed("game");
+    game.router.pushNamed('lose');
   }
 }

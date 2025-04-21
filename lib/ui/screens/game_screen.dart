@@ -27,6 +27,7 @@ class GameScreen extends World with HasGameReference<SnakeGame>, TapCallbacks, D
   @override
   void onMount() {
     super.onMount();
+    GameLogger().i("game screen mount");
     hudComponents.addAll([
       PauseButton(Vector2(GameConstants.snakeSize, GameConstants.mapY / 3), () => {
         _snake.speed = 0
@@ -45,10 +46,26 @@ class GameScreen extends World with HasGameReference<SnakeGame>, TapCallbacks, D
   @override
   Future<void> onLoad() async {
     super.onLoad();
+    GameLogger().i("game screen load");
+    textScore = TextComponent(
+      position: Vector2(game.size.x / 2, GameConstants.mapY / 2),
+      text: "0",
+      textRenderer: TextPaint(
+        style: const TextStyle(
+          fontSize: 64,
+          color: Color(0xFFFFFFFF),
+          fontFamily: 'PixelifySans',
+          fontWeight: FontWeight.w900,
+        ),
+      ),
+      anchor: Anchor.centerLeft,
+    );
+
     loadGame();
   }
 
   Future<void> loadGame() async {
+    GameLogger().i("game screen load game");
     _tileMap = TileMap(game);
     add(_tileMap);
     _snake = Snake(
@@ -57,21 +74,6 @@ class GameScreen extends World with HasGameReference<SnakeGame>, TapCallbacks, D
             (SpriteComponent yummy) {remove(yummy); spawnYummy();}
     );
     add(_snake);
-
-    textScore = TextComponent(
-        position: Vector2(game.size.x / 2, GameConstants.mapY / 2), 
-        text: "0",
-        textRenderer: TextPaint(
-          style: const TextStyle(
-            fontSize: 64,
-            color: Color(0xFFFFFFFF),
-            fontFamily: 'PixelifySans',
-            fontWeight: FontWeight.w900,
-          ),
-        ),
-        anchor: Anchor.centerLeft,
-        //scale: Vector2.all(1.5)
-    );
 
     spawnYummy();
 

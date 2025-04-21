@@ -1,12 +1,10 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
-import 'package:snakegame/common/game_constants.dart';
 import 'package:snakegame/snake_game.dart';
 import '../rounded_button.dart';
-import 'game_screen.dart';
 
-class PauseScreen extends PositionComponent with HasGameReference<SnakeGame> {
-  PauseScreen();
+class LoseScreen extends PositionComponent with HasGameReference<SnakeGame> {
+  LoseScreen();
 
   final pixelTextStyle = TextPaint(
     style: const TextStyle(
@@ -34,9 +32,9 @@ class PauseScreen extends PositionComponent with HasGameReference<SnakeGame> {
       anchor: Anchor.center,
       paint: Paint()..color = const Color(0xFF222222),
       children: [
-        // Текст "Пауза"
+
         TextComponent(
-          text: "Пауза",
+          text: "Ваш счет:",
           anchor: Anchor.topCenter,
           position: Vector2(size.x * 0.9 / 2, 20),
           textRenderer: pixelTextStyle,
@@ -45,10 +43,10 @@ class PauseScreen extends PositionComponent with HasGameReference<SnakeGame> {
         RoundedButton(
           text: 'Заново',
           textRenderer: pixelTextStyle,
-          action: () {
+          action: ()  {
             game.router.pop();
             game.restartGame();
-            },
+          },
           color: const Color(0xFF4B8178),
           borderColor: const Color(0xffedffab),
           width: 150,
@@ -67,16 +65,6 @@ class PauseScreen extends PositionComponent with HasGameReference<SnakeGame> {
           width: 150,
           height: 50,
         )..position = Vector2(size.x * 0.9 / 2, 170),
-
-        RoundedButton(
-          text: 'Продолжить',
-          textRenderer: pixelTextStyle,
-          action: () => {game.router.pop(), (game.world as GameScreen).snake.speed = GameConstants.snakeSpeed},
-          color: const Color(0xFF4B8178),
-          borderColor: const Color(0xffedffab),
-          width: 150,
-          height: 50,
-        )..position = Vector2(size.x * 0.9 / 2, 230)
       ],
     );
     addAll([background, panel]);
