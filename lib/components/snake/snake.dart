@@ -198,7 +198,7 @@ class Snake extends Component with HasGameReference<SnakeGame> {
 
     final lastDir = _directionQueue.isNotEmpty ? _directionQueue.last : _direction;
 
-    if (lastDir + newDir != Vector2.zero()) {
+    if (lastDir + newDir != Vector2.zero() && speed != 0) {
       _directionQueue.add(newDir);
     }
   }

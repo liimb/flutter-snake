@@ -18,7 +18,10 @@ class SnakeGame extends FlameGame with TapDetector, HasCollisionDetection {
 
   late final List<Sprite> groundSprites;
   late final List<Sprite> yummySprites;
+  late final List<Sprite> uiSprites;
   static final _random = Random();
+
+  int score = 0;
 
   @override
   Future<void> onLoad() async {
@@ -34,7 +37,7 @@ class SnakeGame extends FlameGame with TapDetector, HasCollisionDetection {
           'menu': Route(MenuScreen.new, maintainState: false),
           'game': WorldRoute(() {GameLogger().i("game screen in route");return GameScreen();}, maintainState: false),
           'pause': Route(PauseScreen.new),
-          'lose': Route(LoseScreen.new),
+          'lose': Route(() => LoseScreen(score), maintainState: false),
           'authors': Route(AuthorScreen.new),
         },
         initialRoute: 'menu',
@@ -53,6 +56,21 @@ class SnakeGame extends FlameGame with TapDetector, HasCollisionDetection {
 
     yummySprites = await Future.wait(
       Yummy.spritePaths.map((path) => loadSprite(path)),
+    );
+
+    uiSprites = await Future.wait(
+      [
+        'ui/authors_button.png',
+        'ui/play_button.png',
+        'ui/background_menu.png',
+        'ui/pause_background.png',
+        'icons/heart.png',
+        'ui/pause_button.png',
+        'ui/home_button.png',
+        'ui/replay_button.png',
+        'ui/back_button.png',
+        'ui/game_button.png',
+      ].map((path) => loadSprite(path))
     );
 
     GameLogger().i("All assets loaded");

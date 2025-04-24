@@ -8,9 +8,10 @@ import 'package:snakegame/components/map/tile_map.dart';
 import 'package:snakegame/helpers/storage_service.dart';
 import '../../common/direction.dart';
 import '../../common/game_constants.dart';
-import '../../components/ui/pause_button.dart';
 import '../../snake_game.dart';
 import 'dart:async';
+
+import '../custom_button.dart';
 
 class GameScreen extends World with HasGameReference<SnakeGame>, TapCallbacks, DragCallbacks {
   late final TileMap _tileMap;
@@ -28,10 +29,15 @@ class GameScreen extends World with HasGameReference<SnakeGame>, TapCallbacks, D
   void onMount() {
     super.onMount();
     GameLogger().i("game screen mount");
+
     hudComponents.addAll([
-      PauseButton(Vector2(GameConstants.snakeSize, GameConstants.mapY / 3), () => {
-        _snake.speed = 0
-      }),
+      CustomButton(
+          action: () => { _snake.speed = 0, game.router.pushNamed('pause')},
+          butSize: 50,
+          butSprite: game.uiSprites[5],
+          anchor: Anchor.topLeft,
+          position: Vector2(GameConstants.snakeSize, GameConstants.mapY / 4)
+      ),
       textScore
     ]);
     game.camera.viewport.addAll(hudComponents);
@@ -47,6 +53,7 @@ class GameScreen extends World with HasGameReference<SnakeGame>, TapCallbacks, D
   Future<void> onLoad() async {
     super.onLoad();
     GameLogger().i("game screen load");
+
     textScore = TextComponent(
       position: Vector2(game.size.x / 2, GameConstants.mapY / 2),
       text: "0",

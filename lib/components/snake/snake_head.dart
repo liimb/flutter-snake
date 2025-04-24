@@ -57,7 +57,7 @@ class SnakeHead extends SnakePart with CollisionCallbacks {
   void deathSnake() {
     GameLogger().i("death");
     snake.speed = 0;
-    //game.router.pushReplacementNamed("game");
+    game.score = snake.snakeParts.length -  snake.snakeLength;
     game.router.pushNamed('lose');
   }
 }

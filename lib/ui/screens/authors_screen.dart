@@ -1,24 +1,21 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import '../../snake_game.dart';
-import 'package:snakegame/components/ui/simple_button.dart';
+import '../custom_button.dart';
+import 'dart:ui' as ui;
 
 class AuthorCredits {
   final String name;
-
-  AuthorCredits({
-    required this.name,
-  });
+  AuthorCredits({required this.name});
 }
 
 class AuthorScreen extends Component with HasGameReference<SnakeGame> {
   final List<AuthorCredits> authors = [
-    AuthorCredits(
-      name: 'Теницкий Артемий, студент 1 курса ПМиФИ',
-    ),
-    AuthorCredits(
-      name: 'Шушакова Виктория, студент 1 курса ПМиФИ',
-    ),
+    AuthorCredits(name: 'Теницкий Артемий Сергеевич'),
+    AuthorCredits(name: 'Шушакова Виктория Александровна'),
+    AuthorCredits(name: 'Кабденов Муса Токсановив'),
+    AuthorCredits(name: 'Сысоев Иван Сергеевич'),
+    AuthorCredits(name: 'Губарева Мария Алексеевна'),
   ];
 
   @override
@@ -26,103 +23,108 @@ class AuthorScreen extends Component with HasGameReference<SnakeGame> {
     add(
       RectangleComponent(
         size: game.size,
-        paint: Paint()..color = const Color(0xFF1A4D2E),
+        paint: Paint()
+          ..shader = ui.Gradient.linear(
+            Offset(0, 0), // сверху
+            Offset(0, game.size.y), // вниз
+            [
+              const Color(0xFF1A4D2E), // светло-зелёный
+              const Color(0xFF000000), // чёрный
+            ],
+          ),
+        priority: -5
       ),
     );
 
     final centerX = game.size.x / 2;
-    double yPosition = game.size.y * 0.2;
+    final maxTextWidth = game.size.x * 0.8;
+    double yPosition = game.size.y * 0.03;
 
     final snakeSprite = await game.loadSprite('yummies/coffee_espresso.png');
 
-    final titleText = TextComponent(
+    final titleGroup = PositionComponent(
+      position: Vector2(centerX, yPosition),
+      anchor: Anchor.topCenter,
+    );
+
+    const titleIconSize = 40.0;
+    const titleSpacing = 10.0;
+
+    titleGroup.add(SpriteComponent(
+      sprite: snakeSprite,
+      size: Vector2.all(titleIconSize),
+      position: Vector2(-maxTextWidth / 3, 20),
+      anchor: Anchor.topCenter,
+    ));
+
+    titleGroup.add(TextBoxComponent(
       text: 'Авторы проекта:',
-      anchor: Anchor.center,
       textRenderer: TextPaint(
         style: TextStyle(
-          fontSize: 36,
+          fontSize: 32,
           color: const Color(0xFFC8FFF5),
           fontFamily: 'PixelifySans',
           fontWeight: FontWeight.bold,
           shadows: [
-          Shadow(
-          blurRadius: 10,
-          color: Colors.black.withOpacity(0.5),
-          offset: const Offset(2, 2),
-          )],
+            Shadow(blurRadius: 8, color: Colors.black54, offset: Offset(2, 2)),
+          ],
         ),
       ),
-    );
-
-    const iconSize = 40.0;
-    const iconTextSpacing = 15.0;
-
-    final titleGroup = PositionComponent(
-      position: Vector2(centerX, yPosition),
-      anchor: Anchor.center,
-    );
-
-    titleGroup.add(SpriteComponent(
-      sprite: snakeSprite,
-      size: Vector2.all(iconSize),
-      position: Vector2(-titleText.width / 2 - iconSize / 2 - iconTextSpacing, 0),
-      anchor: Anchor.center,
-    ));
-
-    titleGroup.add(TextComponent(
-      text: 'Авторы проекта:',
-      anchor: Anchor.center,
-      position: Vector2.zero(),
-      textRenderer: titleText.textRenderer,
+      boxConfig: TextBoxConfig(
+        maxWidth: maxTextWidth - titleIconSize - titleSpacing,
+        timePerChar: 0.0,
+      ),
+      position: Vector2(titleIconSize + titleSpacing, 0),
+      anchor: Anchor.topCenter,
     ));
 
     add(titleGroup);
-    yPosition += 80;
+    yPosition += 120;
+
+    final icon = await game.loadSprite('yummies/vegetable_tomato.png');
 
     for (var author in authors) {
-      final nameText = TextComponent(
-        text: author.name,
-        anchor: Anchor.center,
+
+      final group = PositionComponent(
         position: Vector2(centerX, yPosition),
+        anchor: Anchor.topCenter,
+      );
+
+      group.add(SpriteComponent(
+        sprite: icon,
+        size: Vector2(24, 24),
+        position: Vector2(-maxTextWidth / 2.2, 20),
+        anchor: Anchor.topLeft,
+      ));
+
+      group.add(TextBoxComponent(
+        text: author.name,
         textRenderer: TextPaint(
           style: TextStyle(
             fontSize: 24,
             color: const Color(0xFFC8FFF5),
             fontFamily: 'PixelifySans',
-            shadows: [
-              Shadow(
-                blurRadius: 5,
-                color: Colors.black.withOpacity(0.3),
-                offset: const Offset(1, 1),
-              ),
-            ],
+            shadows: [Shadow(blurRadius: 5, color: Colors.black38, offset: Offset(1, 1))],
           ),
         ),
-      );
-      add(nameText);
-      yPosition += 60;
+        boxConfig: TextBoxConfig(
+          maxWidth: maxTextWidth - 30,
+          timePerChar: 0.0,
+        ),
+        position: Vector2(30, 0),
+        anchor: Anchor.topCenter,
+      ));
+
+      add(group);
+      yPosition += 90;
     }
 
-    add(BackButton()
-      ..position = Vector2(
-        game.size.x / 2,
-        game.size.y * 0.85,
-      )
-      ..anchor = Anchor.center);
+    add(CustomButton(
+      action: () => game.router.pushReplacementNamed("menu"),
+      butSize: 70,
+      butSprite: game.uiSprites[8],
+      anchor: Anchor.center,
+      position: Vector2(game.size.x / 2, game.size.y * 0.9),
+    ));
   }
-}
-
-class BackButton extends SimpleButton with HasGameReference<SnakeGame> {
-  BackButton()
-      : super(
-    Path()
-      ..moveTo(22, 8)
-      ..lineTo(10, 20)
-      ..lineTo(22, 32)
-      ..moveTo(12, 20)
-      ..lineTo(34, 20),
-  );
-
-  @override
-  void action() => game.router.pushReplacementNamed("menu");
 }

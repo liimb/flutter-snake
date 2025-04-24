@@ -169,8 +169,18 @@ flutter:
     - assets/images/yummies/vegetable_tomato.png
 
     - assets/images/icons/Artemiy.png
+    - assets/images/ui/authors_button.png
+    - assets/images/ui/play_button.png
+    - assets/images/ui/pause_button.png
+    - assets/images/ui/home_button.png
+    - assets/images/ui/replay_button.png
+    - assets/images/ui/back_button.png
+    - assets/images/ui/game_button.png
+    - assets/images/ui/background_menu.png
+    - assets/images/ui/pause_background.png
     - assets/images/icons/vika.png
     - assets/images/icons/cup.png
+    - assets/images/icons/heart.png
     - assets/fonts/Montserrat-Regular.ttf
     - assets/fonts/Roboto-Regular.ttf
     - assets/images/snake_part.png
