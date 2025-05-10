@@ -1,29 +1,44 @@
 import 'package:flame/components.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flame/events.dart';
 import 'package:snakegame/components/snake/snake.dart';
 import 'package:snakegame/components/yummy.dart';
 import 'package:snakegame/helpers/logger_service.dart';
 import 'package:snakegame/components/map/tile_map.dart';
+import 'package:snakegame/helpers/storage_service.dart';
 import '../../common/direction.dart';
-import '../../components/ui/back_button.dart';
-import '../../components/ui/pause_button.dart';
+import '../../common/game_constants.dart';
 import '../../snake_game.dart';
 import 'dart:async';
+
+import '../custom_button.dart';
 
 class GameScreen extends World with HasGameReference<SnakeGame>, TapCallbacks, DragCallbacks {
   late final TileMap _tileMap;
   late final Snake _snake;
+
+  Snake get snake => _snake;
+
   Vector2? _dragStartPosition;
   Vector2? _lastDragPosition;
+  late final TextComponent textScore;
 
   final hudComponents = <Component>[];
 
   @override
   void onMount() {
     super.onMount();
+    GameLogger().i("game screen mount");
+
     hudComponents.addAll([
-      BackButton(),
-      PauseButton(),
+      CustomButton(
+          action: () => { _snake.speed = 0, game.router.pushNamed('pause')},
+          butSize: 50,
+          butSprite: game.uiSprites[5],
+          anchor: Anchor.topLeft,
+          position: Vector2(GameConstants.snakeSize, GameConstants.mapY / 4)
+      ),
+      textScore
     ]);
     game.camera.viewport.addAll(hudComponents);
   }
@@ -37,10 +52,27 @@ class GameScreen extends World with HasGameReference<SnakeGame>, TapCallbacks, D
   @override
   Future<void> onLoad() async {
     super.onLoad();
+    GameLogger().i("game screen load");
+
+    textScore = TextComponent(
+      position: Vector2(game.size.x / 2, GameConstants.mapY / 2),
+      text: "0",
+      textRenderer: TextPaint(
+        style: const TextStyle(
+          fontSize: 64,
+          color: Color(0xFFFFFFFF),
+          fontFamily: 'PixelifySans',
+          fontWeight: FontWeight.w900,
+        ),
+      ),
+      anchor: Anchor.centerLeft,
+    );
+
     loadGame();
   }
 
   Future<void> loadGame() async {
+    GameLogger().i("game screen load game");
     _tileMap = TileMap(game);
     add(_tileMap);
     _snake = Snake(
@@ -51,19 +83,33 @@ class GameScreen extends World with HasGameReference<SnakeGame>, TapCallbacks, D
     add(_snake);
 
     spawnYummy();
+
+    final cupSprite = await game.loadSprite('icons/cup.png');
+
+    add(SpriteComponent(
+      sprite: cupSprite,
+      position: Vector2(-25, -game.size.y / 2 + GameConstants.mapY / 2),
+      size: Vector2.all(35),
+      anchor: Anchor.center
+    ));
   }
 
-  @override
-  void update(double dt) {
-    super.update(dt);
-    _snake.update(dt);
-  }
-
-  void spawnYummy() {
+  void spawnYummy() async {
     Vector2 pos = _calculateYummyPosition();
 
     final currentYummy = Yummy(pos);
     add(currentYummy);
+
+    final currentScore = _snake.snakeParts.length - _snake.snakeLength;
+
+    textScore.text = "$currentScore";
+
+    final storedScore = await StorageService().getScore();
+
+    if (storedScore < currentScore) {
+      await StorageService().saveScore(currentScore);
+      GameLogger().i("New high score: $currentScore");
+    }
 
     GameLogger().i("yummy spawn: $pos");
   }

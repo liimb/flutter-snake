@@ -2,8 +2,6 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:snakegame/components/snake/snake_part.dart';
 
-import '../../common/game_constants.dart';
-
 class SnakeBorder extends SnakePart with CollisionCallbacks {
   SnakeBorder(super.to, super.mySize);
 
@@ -12,13 +10,12 @@ class SnakeBorder extends SnakePart with CollisionCallbacks {
     await super.onLoad();
 
     anchor = Anchor.center;
+    size = mySize;
 
-    add(RectangleHitbox(
-        //TODO хитбокс не по центру
-        size: Vector2.all(GameConstants.snakeSize * scale.x),
+    add(CircleHitbox(
+        position: Vector2(size.x * 0.15, size.x * 0.15),
+        radius: size.x * 0.35,
         collisionType: CollisionType.passive
     ));
-
-    size = mySize;
   }
 }
