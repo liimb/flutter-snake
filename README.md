@@ -1,16 +1,10 @@
-# snakegame
+# Flutter Flame Snake Game
 
-A new Flutter project.
+Google Play: https://play.google.com/store/apps/details?id=com.awaken.snakegame
 
-## Getting Started
+## Snake is a mobile casual game written in Flutter Flame
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+https://github.com/user-attachments/assets/54d420bd-754b-4f33-9962-1fc392fe1551
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
